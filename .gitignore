@@ -1,0 +1,4 @@
+.env
+node_modules/
+classroom/
+wanderlust.listings.pdf
