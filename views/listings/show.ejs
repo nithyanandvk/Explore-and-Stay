@@ -5,7 +5,7 @@
       <h3><%= listing.title %></h3>
     </div>
     <div class="card offset-3 col-6 show-card listing-card">
-      <img src="<%= listing.image %>" class="card-img-top show-img" alt="..." />
+      <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="..." />
       <div class="card-body">
         <p class="card-text">Owned By :<i><%= listing.owner.username %></i></p>
         <p><%= listing.description %></p>
@@ -41,15 +41,54 @@
     >
       <div class="mb-3 mt-3">
         <label for="rating" class="form-label">Rating</label>
-        <input
-          type="range"
-          class="form-range"
-          min="1"
-          max="5"
-          id="rating"
-          name="review[rating]"
-        />
+        <fieldset class="starability-slot">
+          <input
+            type="radio"
+            id="no-rate"
+            class="input-no-rate"
+            name="review[rating]"
+            value="1"
+            checked
+            aria-label="No rating."
+          />
+          <input
+            type="radio"
+            id="first-rate1"
+            name="review[rating]"
+            value="1"
+          />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input
+            type="radio"
+            id="first-rate2"
+            name="review[rating]"
+            value="2"
+          />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input
+            type="radio"
+            id="first-rate3"
+            name="review[rating]"
+            value="3"
+          />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input
+            type="radio"
+            id="first-rate4"
+            name="review[rating]"
+            value="4"
+          />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input
+            type="radio"
+            id="first-rate5"
+            name="review[rating]"
+            value="5"
+          />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
       </div>
+
       <div class="mb-3 mt-3">
         <label for="comment" class="form-label">Comments</label>
         <textarea
@@ -73,8 +112,11 @@
       <div class="card col-5 ms-3 mb-3">
         <div class="card-body">
           <div class="card-title">@<%= review.author.username %></div>
+          <p
+            class="starability-result card-text"
+            data-rating="<%= review.rating %>"
+          ></p>
           <p class="card-text"><%= review.comment %></p>
-          <p class="card-text"><%= review.rating %> stars</p>
         </div>
         <%if (currUser && currUser._id.equals(review.author._id)) { %>
         <form
