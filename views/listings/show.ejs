@@ -1,14 +1,21 @@
 <%layout("/layouts/boilerplate")%>
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN%>";
+</script>
 <body>
   <div class="row mt-3">
     <div class="col-8 offset-3">
       <h3><%= listing.title %></h3>
     </div>
     <div class="card offset-3 col-6 show-card listing-card">
-      <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="..." />
+      <img
+        src="<%= listing.image.url %>"
+        class="card-img-top show-img"
+        alt="..."
+      />
       <div class="card-body">
         <p class="card-text">Owned By :<i><%= listing.owner.username %></i></p>
-        <p><%= listing.description %></p>
+        <p class="card-text"><%= listing.description %></p>
         <p>&#8377;<%=listing.price.toLocaleString("en-IN") %></p>
         <p><%= listing.location %></p>
         <p><%= listing.country %></p>
@@ -30,8 +37,8 @@
   <%} %>
 
   <div class="col-8 offset-3">
-    <hr />
     <% if (currUser) { %>
+    <hr />
     <h4>Leave a Review</h4>
     <form
       action="/listings/<%= listing.id %>/reviews"
@@ -104,10 +111,10 @@
       <button class="btn btn-outline-dark mt-3 mb-3">Submit</button>
     </form>
     <hr />
-    <% } %>
+    <% } %> <% if (listing.reviews.length>0) { %>
 
-    <p><b>All Reviews</b></p>
     <div class="row">
+      <p><b>All Reviews</b></p>
       <% for(review of listing.reviews) { %>
       <div class="card col-5 ms-3 mb-3">
         <div class="card-body">
@@ -130,5 +137,13 @@
       </div>
       <% } %>
     </div>
+    <% } %>
   </div>
+
+  <!-- <div class="col-8 offset-3 mb-3">
+    <h3>Where you'll be</h3>
+    <div id="map"></div>
+  </div>
+
+  <script src="/js/map.js"></script> -->
 </body>

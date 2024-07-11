@@ -99,3 +99,12 @@ body {
 .btns {
   display: flex;
 }
+
+
+/*map*/
+
+#map{
+  height:400px;
+  width:80vh;
+   
+}
