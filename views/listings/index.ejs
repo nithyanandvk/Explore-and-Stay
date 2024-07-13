@@ -126,14 +126,12 @@
       />
       <div class="card-img-overlay"></div>
       <div class="card-body">
-        
         <p class="card-text">
           <b><%= listing.title %></b><br />
-          <% if (listing.category) { %>
-          Category : <%=listing.category.charAt(0).toUpperCase()+listing.category.slice(1)%>          
+          <% if (listing.category) { %> Category :
+          <%=listing.category.charAt(0).toUpperCase()+listing.category.slice(1)%>
           <br />
-          <% } %>
-          &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
+          <% } %> &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
           <i class="tax-info">&nbsp;&nbsp;+18% GST</i>
         </p>
       </div>

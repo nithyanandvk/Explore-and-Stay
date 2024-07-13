@@ -22,7 +22,6 @@
 //     country: "Costa Rica",
 //   },
 
-
 const sampleListings = [
   {
     title: "Cozy Beachfront Cottage",
