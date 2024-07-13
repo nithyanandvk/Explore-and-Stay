@@ -1,21 +1,41 @@
 <%layout("/layouts/boilerplate")%>
-<script>
-  const mapToken = "<%= process.env.MAP_TOKEN%>";
-</script>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+<script src="https://apis.mappls.com/advancedmaps/api/8aa77abd42e9c8c3d6d3fe30cf10c3c8/map_sdk?v=3.0&layer=vector"></script>
+
 <body>
   <div class="row mt-3">
-    <div class="col-8 offset-3">
+    <div class="col-10 offset-2">
       <h3><%= listing.title %></h3>
     </div>
-    <div class="card offset-3 col-6 show-card listing-card">
+    <div
+      class="card col-10 offset-2 col-lg-8 offset-lg-2 show-card listing-card mx-auto"
+    >
       <img
         src="<%= listing.image.url %>"
         class="card-img-top show-img"
         alt="..."
       />
       <div class="card-body">
-        <p class="card-text">Owned By :<i><%= listing.owner.username %></i></p>
+        <p class="card-text mt-3">
+          Owned By :<i><%= listing.owner.username %></i>
+        </p>
         <p class="card-text"><%= listing.description %></p>
+
+        <% if (listing.category) { %>
+
+        <p class="card-text">
+          Category : <%= listing.category.charAt(0).toUpperCase() +
+          listing.category.slice(1) %>
+        </p>
+
+        <% } %>
         <p>&#8377;<%=listing.price.toLocaleString("en-IN") %></p>
         <p><%= listing.location %></p>
         <p><%= listing.country %></p>
@@ -24,126 +44,167 @@
   </div>
   <%if (currUser && currUser._id.equals(listing.owner._id)) { %>
 
-  <div class="btns">
+  <div class="btns col-8 offset-2">
     <a
       href="/listings/<%= listing._id %>/edit"
-      class="btn btn-dark col-1 offset-3 edit-btn"
-      >Edit</a
+      class="btn btn-dark edit-btn me-3"
+      >&nbsp;&nbsp;Edit&nbsp;&nbsp;</a
     >
-    <form method="POST" action="/listings/<%= listing.id %>?_method=DELETE">
-      <button class="btn btn-dark offset-5">Delete</button>
+    <form
+      method="POST"
+      action="/listings/<%= listing.id %>?_method=DELETE"
+      class="d-inline"
+    >
+      <button class="btn btn-dark">Delete</button>
     </form>
   </div>
   <%} %>
 
-  <div class="col-8 offset-3">
-    <% if (currUser) { %>
-    <hr />
-    <h4>Leave a Review</h4>
-    <form
-      action="/listings/<%= listing.id %>/reviews"
-      method="POST"
-      novalidate
-      class="needs-validation"
-    >
-      <div class="mb-3 mt-3">
-        <label for="rating" class="form-label">Rating</label>
-        <fieldset class="starability-slot">
-          <input
-            type="radio"
-            id="no-rate"
-            class="input-no-rate"
-            name="review[rating]"
-            value="1"
-            checked
-            aria-label="No rating."
-          />
-          <input
-            type="radio"
-            id="first-rate1"
-            name="review[rating]"
-            value="1"
-          />
-          <label for="first-rate1" title="Terrible">1 star</label>
-          <input
-            type="radio"
-            id="first-rate2"
-            name="review[rating]"
-            value="2"
-          />
-          <label for="first-rate2" title="Not good">2 stars</label>
-          <input
-            type="radio"
-            id="first-rate3"
-            name="review[rating]"
-            value="3"
-          />
-          <label for="first-rate3" title="Average">3 stars</label>
-          <input
-            type="radio"
-            id="first-rate4"
-            name="review[rating]"
-            value="4"
-          />
-          <label for="first-rate4" title="Very good">4 stars</label>
-          <input
-            type="radio"
-            id="first-rate5"
-            name="review[rating]"
-            value="5"
-          />
-          <label for="first-rate5" title="Amazing">5 stars</label>
-        </fieldset>
-      </div>
-
-      <div class="mb-3 mt-3">
-        <label for="comment" class="form-label">Comments</label>
-        <textarea
-          name="review[comment]"
-          id="comment"
-          cols="30"
-          rows="5"
-          class="form-control"
-          required
-        ></textarea>
-        <div class="invalid-feedback">Please add some comments for review</div>
-      </div>
-      <button class="btn btn-outline-dark mt-3 mb-3">Submit</button>
-    </form>
-    <hr />
-    <% } %> <% if (listing.reviews.length>0) { %>
-
-    <div class="row">
-      <p><b>All Reviews</b></p>
-      <% for(review of listing.reviews) { %>
-      <div class="card col-5 ms-3 mb-3">
-        <div class="card-body">
-          <div class="card-title">@<%= review.author.username %></div>
-          <p
-            class="starability-result card-text"
-            data-rating="<%= review.rating %>"
-          ></p>
-          <p class="card-text"><%= review.comment %></p>
-        </div>
-        <%if (currUser && currUser._id.equals(review.author._id)) { %>
+  <div class="row">
+    <div class="col-lg-2 col-1"></div>
+    <div class="col-lg-8 col-10">
+      <div class="review-form">
+        <% if (currUser) { %>
+        <hr />
+        <h4 class="text-center">Leave a Review</h4>
         <form
-          action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-          class="mb-3 mt-3"
+          action="/listings/<%= listing.id %>/reviews"
           method="POST"
+          novalidate
+          class="needs-validation"
         >
-          <button class="btn btn-sm btn-dark">Delete</button>
+          <div class="mb-3 mt-3">
+            <label for="rating" class="form-label">Rating</label>
+            <fieldset class="starability-slot">
+              <input
+                type="radio"
+                id="no-rate"
+                class="input-no-rate"
+                name="review[rating]"
+                value="1"
+                checked
+                aria-label="No rating."
+              />
+              <input
+                type="radio"
+                id="first-rate1"
+                name="review[rating]"
+                value="1"
+              />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input
+                type="radio"
+                id="first-rate2"
+                name="review[rating]"
+                value="2"
+              />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input
+                type="radio"
+                id="first-rate3"
+                name="review[rating]"
+                value="3"
+              />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input
+                type="radio"
+                id="first-rate4"
+                name="review[rating]"
+                value="4"
+              />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input
+                type="radio"
+                id="first-rate5"
+                name="review[rating]"
+                value="5"
+              />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+          </div>
+
+          <div class="mb-3 mt-3">
+            <label for="comment" class="form-label">Comments</label>
+            <textarea
+              name="review[comment]"
+              id="comment"
+              cols="30"
+              rows="5"
+              class="form-control"
+              required
+            ></textarea>
+            <div class="invalid-feedback">
+              Please add some comments for review
+            </div>
+          </div>
+          <button class="btn btn-outline-dark mt-3 mb-3">Submit</button>
         </form>
-        <%} %>
+
+        <% } %> <% if (listing.reviews.length>0) { %>
+        <hr />
+        <div class="row">
+          <h4 class="text-center mb-4">All Reviews</h4>
+          <% for(review of listing.reviews) { %>
+          <div class="card col-10 col-md-5 mb-3 mx-auto">
+            <div class="card-body">
+              <div class="card-title">@<%= review.author.username %></div>
+              <p
+                class="starability-result card-text"
+                data-rating="<%= review.rating %>"
+              ></p>
+              <p class="card-text"><%= review.comment %></p>
+            </div>
+            <%if (currUser && currUser._id.equals(review.author._id)) { %>
+            <form
+              action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+              class="mb-3 mt-3"
+              method="POST"
+            >
+              <button class="btn btn-sm btn-dark deleteBtn">Delete</button>
+            </form>
+            <%} %>
+          </div>
+          <% } %>
+        </div>
+        <% } %>
       </div>
-      <% } %>
     </div>
-    <% } %>
+    <div class="col-lg-2 col-1"></div>
   </div>
 
-  <!-- <div class="col-8 offset-3 mb-3">
-    <h3>Where you'll be</h3>
-    <div id="map"></div>
+  <hr class="col-10 offset-1 col-lg-8 offset-lg-2" />
+
+  <div class="row mt-3 mb-3">
+    <div class="map col-10 offset-1">
+      Where you will be : <b><%=listing.location%>, <%=listing.country%></b>
+      <br />
+      <div id="map"></div>
+    </div>
   </div>
 
-  <script src="/js/map.js"></script> -->
+  <script>
+    let lng = "<%=listing.geometry.coordinates[1] %>";
+    let lat = "<%=listing.geometry.coordinates[0] %>";
+    console.log(lng, "..", lat);
+    map = new mappls.Map("map", {
+      zoom: 10,
+      center: { lat: lat, lng: lng },
+      zoomControl: true,
+      draggable: true,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+    });
+
+    var marker = new mappls.Marker({
+      map: map,
+      position: { lat: lat, lng: lng },
+      width: 40,
+      height: 70,
+      popupOptions: true,
+      popupHtml: "<b> <%=listing.location%>,<%=listing.country%> </b>",
+      clustersOptions: { color: "blue", bgcolor: "red" },
+      icon_url:
+        "https://res.cloudinary.com/dzsgjnpzh/image/upload/v1720779221/wanderlust_DEV/owkyouuk881nw4bi4ykj.png",
+    });
+  </script>
 </body>

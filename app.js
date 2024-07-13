@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !="production"){
+if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
 //console.log(process.env.SECRET);
@@ -52,10 +52,6 @@ const sessionOptions = {
     httpOnly: true,
   },
 };
-
-// app.get("/", (req, res) => {
-//   res.send("Hi, I am root");
-// });
 
 app.use(session(sessionOptions));
 app.use(flash());

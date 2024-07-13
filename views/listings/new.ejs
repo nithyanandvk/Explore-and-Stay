@@ -1,4 +1,10 @@
 <%layout("/layouts/boilerplate")%>
+<style>
+  .category {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
 <body>
   <div class="row">
     <div class="col-8 offset-2 mt-3">
@@ -51,7 +57,25 @@
             />
             <div class="invalid-feedback">Price should be valid</div>
           </div>
-          <div class="mb-3 col-md-8">
+
+          <div class="mb-3 col-md-4 category">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" name="listing[category]">
+              <option selected value="trending">Trending</option>
+              <option value="rooms">Rooms</option>
+              <option value="mountains">Mountains</option>
+              <option value="castles">Castles</option>
+              <option value="cities">Iconic Cities</option>
+              <option value="pools">Pools</option>
+              <option value="camping">Camping</option>
+              <option value="farms">Farms</option>
+              <option value="arctic">Arctic</option>
+              <option value="domes">Domes</option>
+              <option value="boats">Boats</option>
+            </select>
+          </div>
+
+          <div class="mb-3 col-md-4">
             <label for="country" class="form-label">Country</label>
             <input
               name="listing[country]"

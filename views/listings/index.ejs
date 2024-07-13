@@ -1,99 +1,105 @@
 <%layout("/layouts/boilerplate")%>
-<style>
-  #filters {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .filter {
-    text-align: center;
-    margin-right: 2rem;
-    margin-top: 2rem;
-    opacity: 0.7;
-  }
-
-  .filter:hover {
-    opacity: 1;
-    cursor: pointer;
-  }
-
-  .filter p {
-    font-size: 0.8rem;
-  }
-
-  .tax-info {
-    display: none;
-  }
-
-  .tax-toggle {
-    border: 1px solid black;
-    border-radius: 1rem;
-    height: 3.25rem;
-    padding: 1rem;
-    margin-left: 2rem;
-    display: flex;
-    align-items: center;
-  }
-</style>
-
 <!-- <h3>All Listings</h3> -->
 <div id="filters">
-  <div class="filter">
-    <div><i class="fa-solid fa-fire"></i></div>
-    <p>Trending</p>
-  </div>
+  <form action="/listings/filter/trending" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-bed"></i></div>
-    <p>Rooms</p>
-  </div>
+  <form action="/listings/filter/rooms" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-mountain-city"></i></div>
-    <p>Iconic Cities</p>
-  </div>
+  <form action="/listings/filter/mountains" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-mountain"></i></div>
+        <p>Mountains</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-mountain"></i></div>
-    <p>Mountains</p>
-  </div>
+  <form action="/listings/filter/castles" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-brands fa-fort-awesome"></i></div>
-    <p>Castles</p>
-  </div>
+  <form action="/listings/filter/cities" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+        <p>Iconic Cities</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-person-swimming"></i></div>
-    <p>Amazing Pools</p>
-  </div>
+  <form action="/listings/filter/pools" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Pools</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-campground"></i></div>
-    <p>Camping</p>
-  </div>
+  <form action="/listings/filter/camping" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-cow"></i></div>
-    <p>Farms</p>
-  </div>
+  <form action="/listings/filter/farms" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-cow"></i></div>
+        <p>Farms</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-snowflake"></i></div>
-    <p>Arctic</p>
-  </div>
+  <form action="/listings/filter/arctic" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-snowflake"></i></div>
+        <p>Arctic</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-igloo"></i></div>
-    <p>Domes</p>
-  </div>
+  <form action="/listings/filter/domes" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-igloo"></i></div>
+        <p>Domes</p>
+      </div>
+    </button>
+  </form>
 
-  <div class="filter">
-    <div><i class="fa-solid fa-ship"></i></div>
-    <p>Boats</p>
-  </div>
-  <div class="tax-toggle">
+  <form action="/listings/filter/boats" class="filter-form" method="get">
+    <button type="submit">
+      <div class="filter">
+        <div><i class="fa-solid fa-ship"></i></div>
+        <p>Boats</p>
+      </div>
+    </button>
+  </form>
+  <div class="tax-toggle" style="margin: auto">
     <div class="form-check-reverse form-switch">
       <input
         class="form-check-input"
@@ -120,8 +126,13 @@
       />
       <div class="card-img-overlay"></div>
       <div class="card-body">
+        
         <p class="card-text">
           <b><%= listing.title %></b><br />
+          <% if (listing.category) { %>
+          Category : <%=listing.category.charAt(0).toUpperCase()+listing.category.slice(1)%>          
+          <br />
+          <% } %>
           &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
           <i class="tax-info">&nbsp;&nbsp;+18% GST</i>
         </p>

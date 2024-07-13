@@ -5,10 +5,9 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
-const multer=require("multer");
-const {storage}=require("../cloudConfig.js");
-const upload=multer({storage});
-
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
 //Index route //create route
 
@@ -22,11 +21,12 @@ router
     wrapAsync(listingController.createListing)
   );
 
-
 //new route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
 //Show route //update route //delete Route
+
+router.get("/search", wrapAsync(listingController.search));
 
 router
   .route("/:id")
@@ -47,5 +47,7 @@ router.get(
   isOwner,
   wrapAsync(listingController.renderEditForm)
 );
+
+router.get("/filter/:category", listingController.filter);
 
 module.exports = router;
